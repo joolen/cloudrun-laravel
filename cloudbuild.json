@@ -1,0 +1,28 @@
+{
+  "steps": [
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "entrypoint": "bash",
+      "args": [
+        "-c",
+        "docker pull gcr.io/{your-project-id}/cloud-run-demo:latest || exit 0"
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "gcr.io/{your-project-id}/cloud-run-demo:latest",
+        "--cache-from",
+        "gcr.io/{your-project-id}/cloud-run-demo:latest",
+        "-f",
+        "Dockerfile",
+        "."
+      ]
+    }
+  ],
+  "images": [
+    "gcr.io/{your-project-id}/cloud-run-demo:latest"
+  ]
+}
