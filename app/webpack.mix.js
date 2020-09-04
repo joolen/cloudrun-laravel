@@ -11,6 +11,33 @@ const mix = require("laravel-mix");
  |
  */
 
+ //ここを追加！
+const WebpackGoogleCloudStoragePlugin = require("webpack-google-cloud-storage-plugin");
+
+const plugins = [];
+if (mix.inProduction()) {
+    mix.version();
+    plugins.push(
+        new WebpackGoogleCloudStoragePlugin({
+            directory: "public",
+            include: ["app.js","app.css"],
+            exclude: ["images"],
+            storageOptions: {
+                keyFilename: process.env.MIX_CLOUD_STORAGE_CREDENTIAL_FILE
+            },
+            uploadOptions: {
+                bucketName: process.env.MIX_PUBLIC_BUCKET_NAME,
+                destinationNameFn: file => path.join("", file.path),
+                gzip: true,
+                makePublic: true,
+                resumable: true,
+                concurrency: 5
+            }
+        })
+    );
+}
+//追加ここまで
+
 mix.ts("resources/assets/ts/app.tsx", "public/js")
     .sass("resources/assets/sass/app.scss", "public/css")
     .options({
@@ -56,6 +83,8 @@ mix.ts("resources/assets/ts/app.tsx", "public/js")
             alias: {
                 react: path.resolve("./node_modules/react")
             }
-        }
+        },
+        plugins: plugins//ここも追加しています。
     });
+    
     

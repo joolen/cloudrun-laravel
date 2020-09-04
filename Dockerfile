@@ -33,5 +33,8 @@ RUN php artisan key:generate  \
   && php artisan config:cache \
   && php artisan view:cache
 
+# ReactのモジュールをコンパイルしてCloud Storageにアップロード
+RUN npm install && npm run prod
+
 RUN chmod 777 -R /var/www/html/storage/framework/
 
