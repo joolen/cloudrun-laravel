@@ -13,7 +13,7 @@ RUN apt-get update \
   && git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis \
   && docker-php-ext-install redis 
 
-EXPOSE 8080
+EXPOSE 80
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
@@ -33,5 +33,5 @@ RUN php artisan key:generate  \
   && php artisan config:cache \
   && php artisan view:cache
 
-RUN chmod 777 -R /var/www/html/storage/framework/ \
-  && echo "Listen 8080" >> /etc/apache2/ports.conf 
+RUN chmod 777 -R /var/www/html/storage/framework/
+
