@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +11,51 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+mix.ts("resources/assets/ts/app.tsx", "public/js")
+    .sass("resources/assets/sass/app.scss", "public/css")
+    .options({
+        processCssUrls: false
+    })
+    .webpackConfig({
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    loader: "ts-loader",
+                    exclude: /node_modules/
+                },
+                {
+                    test: /\.js?$/,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: "babel-loader",
+                        options: {
+                            presets: ["@babel/preset-env", "@babel/react"]
+                        }
+                    }
+                },
+                {
+                    test: /\.s[ac]ss$/i,
+                    use: [
+                        {
+                            loader: "resolve-url-loader",
+                            options: {}
+                        },
+                        {
+                            loader: "sass-loader",
+                            options: {
+                                sourceMap: true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        resolve: {
+            extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
+            alias: {
+                react: path.resolve("./node_modules/react")
+            }
+        }
+    });
+    
